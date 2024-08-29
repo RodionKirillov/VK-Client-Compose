@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">VK Client Compose</string>
+    <string name="teplate_text">Если бы я создавал рейтинг Android-оболочек, то он бы выглядел так:</string>
 </resources>
