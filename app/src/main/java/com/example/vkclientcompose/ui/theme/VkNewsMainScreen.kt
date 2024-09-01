@@ -16,6 +16,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -40,12 +41,17 @@ fun MainScreen() {
                         onClick = { selectedItemPosition = index },
                         icon = {
                             Icon(
-                                item.icon,
+                                imageVector = if (selectedItemPosition == index) item.selectedIcon
+                                else item.unselectedIcon,
                                 contentDescription = null
                             )
                         },
                         label = {
-                            Text(text = stringResource(id = item.titleResId))
+                            Text(
+                                text = stringResource(id = item.titleResId),
+                                fontWeight = if (selectedItemPosition == index) FontWeight.Bold
+                                else FontWeight.Normal
+                            )
                         },
                         colors = NavigationBarItemDefaults.colors(
                             selectedIconColor = MaterialTheme.colorScheme.onPrimary,
