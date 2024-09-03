@@ -50,7 +50,7 @@ fun PostCard(
         ) {
             PostHeader(feedPost)
             Spacer(modifier = Modifier.padding(8.dp))
-            Text(text = feedPost.contentText)
+            Text(text = feedPost.contentText, color = MaterialTheme.colorScheme.onPrimary)
             Spacer(modifier = Modifier.padding(8.dp))
             Image(
                 modifier = Modifier.fillMaxWidth(),
@@ -61,7 +61,7 @@ fun PostCard(
             Spacer(modifier = Modifier.padding(8.dp))
             Statistics(
                 feedPost.statistics,
-                onLikeClickListener= onLikeClickListener,
+                onLikeClickListener = onLikeClickListener,
                 onViewsClickListener = onViewsClickListener,
                 onShareClickListener = onShareClickListener,
                 onCommentClickListener = onCommentClickListener
