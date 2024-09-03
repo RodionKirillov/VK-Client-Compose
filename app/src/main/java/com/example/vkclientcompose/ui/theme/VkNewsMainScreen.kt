@@ -41,27 +41,25 @@ import com.example.vkclientcompose.MainViewModel
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun MainScreen(viewModel: MainViewModel) {
+    val selectedNavItem by viewModel.selectedNavItem.observeAsState(NavigationItem.Home)
     Scaffold(
         containerColor = MaterialTheme.colorScheme.primary,
         bottomBar = {
             NavigationBar(
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
-                var selectedItemPosition by rememberSaveable {
-                    mutableIntStateOf(0)
-                }
                 val items = listOf(
                     NavigationItem.Home,
                     NavigationItem.Favorite,
                     NavigationItem.Profile
                 )
-                items.forEachIndexed { index, item ->
+                items.forEach { item ->
                     NavigationBarItem(
-                        selected = selectedItemPosition == index,
-                        onClick = { selectedItemPosition = index },
+                        selected = selectedNavItem == item,
+                        onClick = { viewModel.selectNavItem(item) },
                         icon = {
                             Icon(
-                                imageVector = if (selectedItemPosition == index) item.selectedIcon
+                                imageVector = if (selectedNavItem == item) item.selectedIcon
                                 else item.unselectedIcon,
                                 contentDescription = null
                             )
@@ -69,7 +67,7 @@ fun MainScreen(viewModel: MainViewModel) {
                         label = {
                             Text(
                                 text = stringResource(id = item.titleResId),
-                                fontWeight = if (selectedItemPosition == index) FontWeight.Bold
+                                fontWeight = if (selectedNavItem == item) FontWeight.Bold
                                 else FontWeight.Normal
                             )
                         },
@@ -84,91 +82,28 @@ fun MainScreen(viewModel: MainViewModel) {
                 }
             }
         }
-    ) {
-        val feedPosts = viewModel.feedPosts.observeAsState(mutableListOf())
+    ) { paddingValues ->
+        when (selectedNavItem) {
 
-        LazyColumn(
-            modifier = Modifier.padding(it),
-            contentPadding = PaddingValues(
-                top = 16.dp,
-                start = 8.dp,
-                end = 8.dp
-            ),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(
-                items = feedPosts.value,
-                key = { feedPost -> feedPost.id }
-            ) { model ->
+            NavigationItem.Home -> {
+                HomeScreen(viewModel = viewModel, paddingValues = paddingValues)
+            }
 
-                val dismissThresholds = with(LocalDensity.current) {
-                    LocalConfiguration.current.screenWidthDp.dp.toPx() * 0.5f
-                }
-
-                val dismissBoxState = rememberSwipeToDismissBoxState(
-                    positionalThreshold = { dismissThresholds },
-                    confirmValueChange = { value ->
-                        val isDismissed = value in setOf(
-                            SwipeToDismissBoxValue.StartToEnd,
-                            SwipeToDismissBoxValue.EndToStart
-                        )
-                        if (isDismissed) viewModel.remove(model)
-
-                        return@rememberSwipeToDismissBoxState isDismissed
-                    }
+            NavigationItem.Favorite -> {
+                Text(
+                    modifier = Modifier.padding(paddingValues),
+                    text = "Favorite",
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
-
-                SwipeToDismissBox(
-                    modifier = Modifier.animateItemPlacement(),
-                    state = dismissBoxState,
-                    enableDismissFromEndToStart = true,
-                    enableDismissFromStartToEnd = false,
-                    backgroundContent = {
-                        Box(
-                            modifier = Modifier
-                                .padding(16.dp)
-                                .background(Color.Red.copy(alpha = 0.7f))
-                                .fillMaxSize(),
-                            contentAlignment = Alignment.CenterEnd
-                        ) {
-                            Text(
-                                modifier = Modifier.padding(16.dp),
-                                text = "DELETE ${model.id}",
-                                color = Color.White,
-                                fontSize = 24.sp
-                            )
-                        }
-                    }
-                ) {
-                    PostCard(
-                        feedPost = model,
-                        onViewsClickListener = { statisticItem ->
-                            viewModel.updateCount(
-                                feedPost = model,
-                                item = statisticItem
-                            )
-                        },
-                        onShareClickListener = { statisticItem ->
-                            viewModel.updateCount(
-                                feedPost = model,
-                                item = statisticItem
-                            )
-                        },
-                        onCommentClickListener = { statisticItem ->
-                            viewModel.updateCount(
-                                feedPost = model,
-                                item = statisticItem
-                            )
-                        },
-                        onLikeClickListener = { statisticItem ->
-                            viewModel.updateCount(
-                                feedPost = model,
-                                item = statisticItem
-                            )
-                        },
-                    )
-                }
+            }
+            NavigationItem.Profile -> {
+                Text(
+                    modifier = Modifier.padding(paddingValues),
+                    text = "Profile",
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             }
         }
+
     }
 }
