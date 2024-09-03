@@ -20,7 +20,7 @@ private val DarkColorScheme = darkColorScheme(
     onSecondary = Black500,
 
     //Background Card
-    surfaceVariant = Black900
+    surfaceVariant = Grey900
 )
 
 private val LightColorScheme = lightColorScheme(

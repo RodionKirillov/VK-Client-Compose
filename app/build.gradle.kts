@@ -51,6 +51,8 @@ android {
 
 dependencies {
 
+    //SwipeToDismiss
+    implementation("androidx.compose.material3:material3:1.2.1")
 
     //Compose LiveData
     implementation ("androidx.compose.runtime:runtime-livedata:1.6.8")
