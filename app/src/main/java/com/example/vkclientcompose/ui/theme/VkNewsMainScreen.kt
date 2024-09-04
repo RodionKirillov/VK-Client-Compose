@@ -19,6 +19,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.vkclientcompose.MainViewModel
 import com.example.vkclientcompose.navigation.AppNavGraph
+import com.example.vkclientcompose.navigation.Screen
 
 @Composable
 fun MainScreen(viewModel: MainViewModel) {
@@ -41,7 +42,15 @@ fun MainScreen(viewModel: MainViewModel) {
                 items.forEach { item ->
                     NavigationBarItem(
                         selected = currentRoute == item.screen.route,
-                        onClick = { navHostController.navigate(item.screen.route) },
+                        onClick = {
+                            navHostController.navigate(item.screen.route) {
+                                popUpTo(Screen.NewsFeed.route) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        },
                         icon = {
                             Icon(
                                 imageVector = if (currentRoute == item.screen.route) {
