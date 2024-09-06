@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vkclientcompose.CommentsViewModel
+import com.example.vkclientcompose.CommentsViewModelFactory
 import com.example.vkclientcompose.R
 import com.example.vkclientcompose.domain.FeedPost
 import com.example.vkclientcompose.domain.PostComment
@@ -41,11 +42,15 @@ import com.example.vkclientcompose.domain.PostComment
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CommentsScreen(
+    feedPost: FeedPost,
     onBackPressed: () -> Unit
 ) {
-    val viewModel: CommentsViewModel = viewModel()
+    val viewModel: CommentsViewModel = viewModel(
+        factory = CommentsViewModelFactory(feedPost = feedPost)
+    )
     val screenState = viewModel.screenState.observeAsState(CommentsScreenState.Initial)
     val currentState = screenState.value
+
     if (currentState is CommentsScreenState.Comments) {
         Scaffold(
             topBar = {
