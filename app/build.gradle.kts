@@ -50,6 +50,8 @@ android {
 }
 
 dependencies {
+    //Viewmodel Compose
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
     val nav_version = "2.7.7"
 
     // Jetpack Compose integration

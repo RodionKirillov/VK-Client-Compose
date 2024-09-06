@@ -3,17 +3,12 @@ package com.example.vkclientcompose.ui.theme
 import com.example.vkclientcompose.domain.FeedPost
 import com.example.vkclientcompose.domain.PostComment
 
-sealed class HomeScreenState {
+sealed class CommentsScreenState {
 
-    object Initial: HomeScreenState()
-
-    data class Posts(
-        val posts: List<FeedPost>
-    ): HomeScreenState()
+    object Initial : CommentsScreenState()
 
     data class Comments(
         val feedPost: FeedPost,
         val comments: List<PostComment>
-    ): HomeScreenState()
-
+    ) : CommentsScreenState()
 }
