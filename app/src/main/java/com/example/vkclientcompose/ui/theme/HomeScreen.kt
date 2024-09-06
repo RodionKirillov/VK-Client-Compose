@@ -1,5 +1,6 @@
 package com.example.vkclientcompose.ui.theme
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -46,8 +47,14 @@ fun HomeScreen(
         is HomeScreenState.Comments -> {
             CommentsScreen(
                 feedPost = currentState.feedPost,
-                comments = currentState.comments
+                comments = currentState.comments,
+                onBackPressed = {
+                    viewModel.closeComments()
+                }
             )
+            BackHandler {
+                viewModel.closeComments()
+            }
         }
 
         HomeScreenState.Initial -> {
@@ -130,11 +137,8 @@ fun FeedPosts(
                             item = statisticItem
                         )
                     },
-                    onCommentClickListener = { statisticItem ->
-                        viewModel.updateCount(
-                            feedPost = model,
-                            item = statisticItem
-                        )
+                    onCommentClickListener = {
+                        viewModel.showComments(feedPost = model)
                     },
                     onLikeClickListener = { statisticItem ->
                         viewModel.updateCount(
