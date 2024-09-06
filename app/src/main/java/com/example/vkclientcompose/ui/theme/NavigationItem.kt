@@ -18,7 +18,7 @@ sealed class NavigationItem(
     val unselectedIcon: ImageVector
 ) {
     object Home : NavigationItem(
-        screen = Screen.NewsFeed,
+        screen = Screen.Home,
         titleResId = R.string.navigation_item_main,
         selectedIcon = Icons.Filled.Home,
         unselectedIcon = Icons.Outlined.Home

@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.vkclientcompose.domain.FeedPost
 import com.example.vkclientcompose.navigation.AppNavGraph
@@ -38,7 +39,6 @@ fun MainScreen() {
                 containerColor = MaterialTheme.colorScheme.surfaceVariant
             ) {
                 val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
-                val currentRoute = navBackStackEntry?.destination?.route
 
                 val items = listOf(
                     NavigationItem.Home,
@@ -46,14 +46,21 @@ fun MainScreen() {
                     NavigationItem.Profile
                 )
                 items.forEach { item ->
+
+                    val selected = navBackStackEntry?.destination?.hierarchy?.any {
+                        it.route == item.screen.route
+                    } ?: false
+
                     NavigationBarItem(
-                        selected = currentRoute == item.screen.route,
+                        selected = selected,
                         onClick = {
-                            navigationState.navigateTo(item.screen.route)
+                            if (!selected) {
+                                navigationState.navigateTo(item.screen.route)
+                            }
                         },
                         icon = {
                             Icon(
-                                imageVector = if (currentRoute == item.screen.route) {
+                                imageVector = if (selected) {
                                     item.selectedIcon
                                 } else {
                                     item.unselectedIcon
@@ -64,7 +71,7 @@ fun MainScreen() {
                         label = {
                             Text(
                                 text = stringResource(id = item.titleResId),
-                                fontWeight = if (currentRoute == item.screen.route) {
+                                fontWeight = if (selected) {
                                     FontWeight.Bold
                                 } else {
                                     FontWeight.Normal
@@ -90,7 +97,7 @@ fun MainScreen() {
                     paddingValues = paddingValues,
                     onCommentClickListener = {
                         commentsToPost.value = it
-                        navigationState.navigateTo(Screen.Comments.route)
+                        navigationState.navigateToComments()
                     }
                 )
             },
@@ -104,7 +111,7 @@ fun MainScreen() {
             commentsScreenContent = {
                 CommentsScreen(
                     feedPost = commentsToPost.value!!,
-                    onBackPressed = { commentsToPost.value = null },
+                    onBackPressed = { navigationState.navHostController.popBackStack() },
                 )
             },
             profileScreenContent = {
