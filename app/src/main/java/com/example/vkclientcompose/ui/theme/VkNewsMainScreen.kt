@@ -10,23 +10,25 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import com.example.vkclientcompose.MainViewModel
+import com.example.vkclientcompose.domain.FeedPost
 import com.example.vkclientcompose.navigation.AppNavGraph
-import com.example.vkclientcompose.navigation.NavigationState
-import com.example.vkclientcompose.navigation.Screen
 import com.example.vkclientcompose.navigation.rememberNavigationState
 
 @Composable
-fun MainScreen(viewModel: MainViewModel) {
+fun MainScreen() {
     val navigationState = rememberNavigationState()
+    val commentsToPost: MutableState<FeedPost?> = remember {
+        mutableStateOf(null)
+    }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.primary,
@@ -83,10 +85,18 @@ fun MainScreen(viewModel: MainViewModel) {
         AppNavGraph(
             navHostController = navigationState.navHostController,
             homeScreenContent = {
-                HomeScreen(
-                    viewModel = viewModel,
-                    paddingValues = paddingValues
-                )
+                if (commentsToPost.value == null) {
+                    HomeScreen(
+                        paddingValues = paddingValues,
+                        onCommentClickListener = {
+                            commentsToPost.value = it
+                        }
+                    )
+                } else {
+                    CommentsScreen {
+                        commentsToPost.value = null
+                    }
+                }
             },
             favoriteScreenContent = {
                 Text(
