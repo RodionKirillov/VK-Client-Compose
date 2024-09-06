@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.vkclientcompose.domain.FeedPost
 import com.example.vkclientcompose.navigation.AppNavGraph
+import com.example.vkclientcompose.navigation.Screen
 import com.example.vkclientcompose.navigation.rememberNavigationState
 
 @Composable
@@ -84,26 +85,26 @@ fun MainScreen() {
     ) { paddingValues ->
         AppNavGraph(
             navHostController = navigationState.navHostController,
-            homeScreenContent = {
-                if (commentsToPost.value == null) {
-                    HomeScreen(
-                        paddingValues = paddingValues,
-                        onCommentClickListener = {
-                            commentsToPost.value = it
-                        }
-                    )
-                } else {
-                    CommentsScreen(
-                        feedPost = commentsToPost.value!!,
-                        onBackPressed = {commentsToPost.value = null},
-                    )
-                }
+            newsFeedScreenContent = {
+                HomeScreen(
+                    paddingValues = paddingValues,
+                    onCommentClickListener = {
+                        commentsToPost.value = it
+                        navigationState.navigateTo(Screen.Comments.route)
+                    }
+                )
             },
             favoriteScreenContent = {
                 Text(
                     modifier = Modifier.padding(paddingValues),
                     text = "Favorite",
                     color = Color.White
+                )
+            },
+            commentsScreenContent = {
+                CommentsScreen(
+                    feedPost = commentsToPost.value!!,
+                    onBackPressed = { commentsToPost.value = null },
                 )
             },
             profileScreenContent = {
