@@ -15,18 +15,19 @@ sealed class Screen(
         private const val ROUTE_FOR_ARGS = "ROUTE_COMMENTS"
 
         fun getRouteWithArgs(feedPost: FeedPost): String {
-            return "$ROUTE_FOR_ARGS/${feedPost.id}"
+            return "$ROUTE_FOR_ARGS/${feedPost.id}/${feedPost.contentText}"
         }
     }
 
     companion object {
 
-        const val KEY_FEED_POST_ID = "feed_post_id"
+        const val KEY_FEED_POST_ID = "KEY_FEED_POST_ID"
+        const val KEY_FEED_POST_CONTENT = "KEY_FEED_POST_CONTENT"
 
         const val ROUTE_NEWS_FEED = "ROUTE_NEWS_FEED"
         const val ROUTE_FAVORITE = "ROUTE_FAVORITE"
         const val ROUTE_PROFILE = "ROUTE_PROFILE"
         const val ROUTE_HOME = "ROUTE_HOME"
-        const val ROUTE_COMMENTS = "ROUTE_COMMENTS/{$KEY_FEED_POST_ID}"
+        const val ROUTE_COMMENTS = "ROUTE_COMMENTS/{$KEY_FEED_POST_ID}/{$KEY_FEED_POST_CONTENT}"
     }
 }
