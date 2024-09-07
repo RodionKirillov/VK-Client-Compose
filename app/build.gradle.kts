@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+
+    // Parcelize
+    id("kotlin-parcelize")
 }
 
 android {
@@ -50,6 +53,20 @@ android {
 }
 
 dependencies {
+    //GSON
+    implementation ("com.google.code.gson:gson:2.11.0")
+    //Viewmodel Compose
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    val nav_version = "2.7.7"
+
+    // Jetpack Compose integration
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    //SwipeToDismiss
+    implementation("androidx.compose.material3:material3:1.2.1")
+
+    //Compose LiveData
+    implementation ("androidx.compose.runtime:runtime-livedata:1.6.8")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -66,4 +83,5 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(kotlin("script-runtime"))
 }
