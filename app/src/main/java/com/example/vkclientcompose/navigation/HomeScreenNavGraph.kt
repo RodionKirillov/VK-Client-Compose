@@ -1,9 +1,8 @@
 package com.example.vkclientcompose.navigation
 
-import android.util.Log
+import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
@@ -23,23 +22,23 @@ fun NavGraphBuilder.homeScreenNavGraph(
         composable(
             route = Screen.Comments.route,
             arguments = listOf(
-                navArgument(Screen.KEY_FEED_POST_ID) {
-                    type = NavType.IntType
-                },
-
-                navArgument(Screen.KEY_FEED_POST_CONTENT) {
-                    type = NavType.StringType
+                navArgument(Screen.KEY_FEED_POST) {
+                    type = FeedPost.NavigationType
                 }
             )
         ) { //ROUTE_NEWS_FEED/{feed_post_id}
-            val feedPostId = it.arguments?.getInt(Screen.KEY_FEED_POST_ID) ?: 0
-            val feedPostContent = it.arguments?.getString(Screen.KEY_FEED_POST_CONTENT) ?: ""
-            commentsScreenContent(
-                FeedPost(
-                    id = feedPostId,
-                    contentText = feedPostContent
-                )
-            )
+            val args = it.arguments
+            val feedPost = kotlin.runCatching {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                    args?.getParcelable(Screen.KEY_FEED_POST)
+                } else {
+                    args?.getParcelable(
+                        Screen.KEY_FEED_POST,
+                        FeedPost::class.java
+                    )
+                }
+            }.getOrNull() ?: throw IllegalStateException()
+            commentsScreenContent(feedPost)
         }
     }
 }
