@@ -53,6 +53,10 @@ android {
 }
 
 dependencies {
+
+    // VK
+    implementation ("com.vk:android-sdk-core:4.1.0")
+    implementation ("com.vk:android-sdk-api:4.1.0")
     // Coil
     implementation("io.coil-kt:coil-compose:2.7.0")
     // GSON
