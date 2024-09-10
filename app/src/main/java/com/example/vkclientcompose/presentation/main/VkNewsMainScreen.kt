@@ -1,4 +1,4 @@
-package com.example.vkclientcompose.ui.theme
+package com.example.vkclientcompose.presentation.main
 
 
 import androidx.compose.foundation.layout.padding
@@ -19,6 +19,9 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.vkclientcompose.navigation.AppNavGraph
 import com.example.vkclientcompose.navigation.rememberNavigationState
+import com.example.vkclientcompose.presentation.comments.CommentsScreen
+import com.example.vkclientcompose.presentation.news.NewsFeedScreen
+import com.example.vkclientcompose.ui.theme.Blue500
 
 @Composable
 fun MainScreen() {
@@ -85,7 +88,7 @@ fun MainScreen() {
         AppNavGraph(
             navHostController = navigationState.navHostController,
             newsFeedScreenContent = {
-                HomeScreen(
+                NewsFeedScreen(
                     paddingValues = paddingValues,
                     onCommentClickListener = {
                         navigationState.navigateToComments(it)
