@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.example.vkclientcompose.ui.theme.ActivityResultTest
 import com.example.vkclientcompose.ui.theme.MainScreen
 import com.example.vkclientcompose.ui.theme.VKClientComposeTheme
 
@@ -14,7 +15,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             VKClientComposeTheme {
-                MainScreen()
+//                MainScreen()
+                ActivityResultTest()
             }
         }
     }
