@@ -6,8 +6,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import com.example.vkclientcompose.ui.theme.ActivityResultTest
 import com.example.vkclientcompose.ui.theme.MainScreen
+import com.example.vkclientcompose.ui.theme.MyNumber
+import com.example.vkclientcompose.ui.theme.SideEffectTest
 import com.example.vkclientcompose.ui.theme.VKClientComposeTheme
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKAuthenticationResult
@@ -33,7 +37,9 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
-                launcher.launch(listOf(VKScope.WALL))
+                LaunchedEffect(key1 = Unit) {
+                    launcher.launch(listOf(VKScope.WALL))
+                }
                 MainScreen()
             }
         }
