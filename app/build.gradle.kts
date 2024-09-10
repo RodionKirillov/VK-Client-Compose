@@ -53,19 +53,21 @@ android {
 }
 
 dependencies {
-    //GSON
+    // Coil
+    implementation("io.coil-kt:coil-compose:2.7.0")
+    // GSON
     implementation ("com.google.code.gson:gson:2.11.0")
-    //Viewmodel Compose
+    // Viewmodel Compose
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
     val nav_version = "2.7.7"
 
     // Jetpack Compose integration
     implementation("androidx.navigation:navigation-compose:$nav_version")
 
-    //SwipeToDismiss
+    // SwipeToDismiss
     implementation("androidx.compose.material3:material3:1.2.1")
 
-    //Compose LiveData
+    // Compose LiveData
     implementation ("androidx.compose.runtime:runtime-livedata:1.6.8")
 
     implementation(libs.androidx.core.ktx)
