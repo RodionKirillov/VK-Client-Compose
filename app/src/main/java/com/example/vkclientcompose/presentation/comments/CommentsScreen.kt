@@ -1,4 +1,4 @@
-package com.example.vkclientcompose.ui.theme
+package com.example.vkclientcompose.presentation.comments
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,17 +27,14 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.vkclientcompose.CommentsViewModel
-import com.example.vkclientcompose.CommentsViewModelFactory
-import com.example.vkclientcompose.R
 import com.example.vkclientcompose.domain.FeedPost
 import com.example.vkclientcompose.domain.PostComment
+import com.example.vkclientcompose.ui.theme.VKClientComposeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

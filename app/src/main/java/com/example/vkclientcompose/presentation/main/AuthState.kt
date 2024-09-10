@@ -1,4 +1,4 @@
-package com.example.vkclientcompose
+package com.example.vkclientcompose.presentation.main
 
 sealed class AuthState {
 

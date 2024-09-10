@@ -1,11 +1,10 @@
-package com.example.vkclientcompose
+package com.example.vkclientcompose.presentation.comments
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.vkclientcompose.domain.FeedPost
 import com.example.vkclientcompose.domain.PostComment
-import com.example.vkclientcompose.ui.theme.CommentsScreenState
 
 class CommentsViewModel(
     feedPost: FeedPost

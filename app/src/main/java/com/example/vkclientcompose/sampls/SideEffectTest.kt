@@ -1,4 +1,4 @@
-package com.example.vkclientcompose.ui.theme
+package com.example.vkclientcompose.sampls
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
