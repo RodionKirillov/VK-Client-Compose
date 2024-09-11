@@ -47,13 +47,14 @@ fun PostCard(
         modifier = modifier,
         shape = RoundedCornerShape(16.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .padding(8.dp)
-        ) {
+        Column {
             PostHeader(feedPost)
             Spacer(modifier = Modifier.padding(8.dp))
-            Text(text = feedPost.contentText, color = MaterialTheme.colorScheme.onPrimary)
+            Text(
+                modifier = Modifier.padding(8.dp),
+                text = feedPost.contentText,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
             Spacer(modifier = Modifier.padding(8.dp))
             AsyncImage(
                 model = feedPost.contentImageUrl,
@@ -85,9 +86,10 @@ private fun Statistics(
     onCommentClickListener: (StatisticItem) -> Unit,
     isFavorite: Boolean
 ) {
-    Row {
+    Row(modifier = Modifier.padding(8.dp)) {
         Row(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
         ) {
             val viewsItem = statistics.getItemByType(StatisticType.VIEWS)
             IconWithText(
@@ -179,19 +181,20 @@ private fun PostHeader(
 ) {
     Row(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(
             model = feedPost.communityImageUrl,
             modifier = Modifier
-                .size(50.dp)
+                .size(40.dp)
                 .clip(CircleShape)
                 .wrapContentHeight(),
             contentScale = ContentScale.Crop,
             contentDescription = null,
         )
-        Spacer(modifier = Modifier.padding(8.dp))
+        Spacer(modifier = Modifier.padding(4.dp))
         Column(
             modifier = Modifier.weight(1f)
         ) {
@@ -201,7 +204,6 @@ private fun PostHeader(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
             )
-            Spacer(modifier = Modifier.padding(2.dp))
             Text(
                 text = feedPost.publicationData,
                 color = MaterialTheme.colorScheme.onSecondary,
