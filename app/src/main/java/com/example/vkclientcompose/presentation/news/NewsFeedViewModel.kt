@@ -1,28 +1,44 @@
 package com.example.vkclientcompose.presentation.news
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.vkclientcompose.data.mapper.NewsFeedMapper
+import com.example.vkclientcompose.data.network.ApiFactory
 import com.example.vkclientcompose.domain.FeedPost
 import com.example.vkclientcompose.domain.StatisticItem
+import com.vk.api.sdk.VKPreferencesKeyValueStorage
+import com.vk.api.sdk.auth.VKAccessToken
+import kotlinx.coroutines.launch
 
-class NewsFeedViewModel : ViewModel() {
+class NewsFeedViewModel(
+     application: Application
+) : AndroidViewModel(application) {
 
-    private val initialList = mutableListOf<FeedPost>().apply {
-        repeat(5) {
-            add(
-                FeedPost().copy(
-                    id = it,
-                    contentText = "Content $it"
-                )
-            )
-        }
-    }
-    private val initialState = NewsFeedScreenState.Posts(posts = initialList)
+    private val initialState = NewsFeedScreenState.Initial
 
     private val _screenState = MutableLiveData<NewsFeedScreenState>(initialState)
     val screenState: LiveData<NewsFeedScreenState> = _screenState
 
+    init {
+        loadRecommendations()
+    }
+
+    private val mapper = NewsFeedMapper()
+
+    private fun loadRecommendations() {
+        viewModelScope.launch {
+            val storage = VKPreferencesKeyValueStorage(getApplication())
+            val token = VKAccessToken.restore(storage) ?: return@launch
+            val response = ApiFactory.apiService.loadRecommendations(token.accessToken)
+            val feedPosts = mapper.mapResponseToPost(response)
+            _screenState.value = NewsFeedScreenState.Posts(posts = feedPosts)
+        }
+
+    }
 
     fun updateCount(feedPost: FeedPost, item: StatisticItem) {
         val currentState = screenState.value
