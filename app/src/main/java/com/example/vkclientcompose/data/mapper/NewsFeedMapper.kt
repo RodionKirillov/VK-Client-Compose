@@ -4,6 +4,10 @@ import com.example.vkclientcompose.data.model.NewsFeedResponseDto
 import com.example.vkclientcompose.domain.FeedPost
 import com.example.vkclientcompose.domain.StatisticItem
 import com.example.vkclientcompose.domain.StatisticType
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlin.math.absoluteValue
 
 class NewsFeedMapper {
@@ -19,7 +23,7 @@ class NewsFeedMapper {
             val feedPost = FeedPost(
                 id = post.id,
                 communityName = group.name,
-                publicationData = post.date.toString(),
+                publicationData = mapTimestampToDate(post.date * 1000),
                 communityImageUrl = group.imageUrl,
                 contentText = post.text,
                 contentImageUrl = post.attachments?.firstOrNull()?.photo?.photoUrls?.lastOrNull()?.url,
@@ -28,10 +32,17 @@ class NewsFeedMapper {
                     StatisticItem(type = StatisticType.VIEWS, post.views.count),
                     StatisticItem(type = StatisticType.SHARES, post.reposts.count),
                     StatisticItem(type = StatisticType.COMMENTS, post.comments.count),
-                )
+                ),
+                isFavorite = post.isFavorite
             )
             result.add(feedPost)
         }
         return result
+    }
+
+    private fun mapTimestampToDate(timestamp: Long): String {
+        val date = Date(timestamp)
+        return SimpleDateFormat("d MMMM yyyy, hh:mm", Locale.getDefault()).format(date)
+
     }
 }

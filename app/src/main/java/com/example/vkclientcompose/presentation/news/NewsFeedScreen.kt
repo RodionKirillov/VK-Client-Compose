@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vkclientcompose.domain.FeedPost
+import com.example.vkclientcompose.ui.theme.VkGreyBackground
 
 @Composable
 fun NewsFeedScreen(
@@ -64,8 +65,7 @@ fun FeedPosts(
         modifier = Modifier.padding(paddingValues = paddingValues),
         contentPadding = PaddingValues(
             top = 16.dp,
-            start = 8.dp,
-            end = 8.dp
+            bottom = 16.dp
         ),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
