@@ -24,7 +24,7 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Color.White,
+    primary = VkGreyBackground,
     secondary = Color.White,
     tertiary = Color.White,
 

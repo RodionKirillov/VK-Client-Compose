@@ -1,7 +1,8 @@
-package com.example.vkclientcompose.ui.theme
+package com.example.vkclientcompose.presentation.comments
 
-import androidx.compose.foundation.Image
+import android.app.Application
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,22 +24,25 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.graphics.vector.DefaultTintColor
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.vkclientcompose.CommentsViewModel
-import com.example.vkclientcompose.CommentsViewModelFactory
+import coil.compose.AsyncImage
 import com.example.vkclientcompose.R
 import com.example.vkclientcompose.domain.FeedPost
 import com.example.vkclientcompose.domain.PostComment
+import com.example.vkclientcompose.ui.theme.VkGreyBackground
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,18 +51,27 @@ fun CommentsScreen(
     onBackPressed: () -> Unit
 ) {
     val viewModel: CommentsViewModel = viewModel(
-        factory = CommentsViewModelFactory(feedPost = feedPost)
+        factory = CommentsViewModelFactory(
+            feedPost = feedPost,
+            application = LocalContext.current.applicationContext as Application
+        )
     )
+
     val screenState = viewModel.screenState.observeAsState(CommentsScreenState.Initial)
     val currentState = screenState.value
 
     if (currentState is CommentsScreenState.Comments) {
         Scaffold(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
             topBar = {
                 TopAppBar(
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    ),
                     title = {
                         Text(
-                            text = "Comments for FeedPost Id: ${currentState.feedPost.contentText}"
+                            fontWeight = FontWeight.Bold,
+                            text = stringResource(R.string.comments_title)
                         )
                     },
                     navigationIcon = {
@@ -80,15 +94,14 @@ fun CommentsScreen(
                     start = 8.dp,
                     end = 8.dp,
                     bottom = 72.dp
-
-                )
+                ),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(
                     items = currentState.comments,
                     key = { it.id }
                 ) { comment ->
                     CommentItem(comment = comment)
-
                 }
             }
         }
@@ -107,17 +120,20 @@ private fun CommentItem(
                 vertical = 4.dp
             )
     ) {
-        Image(
+        AsyncImage(
             modifier = Modifier
-                .size(24.dp)
+                .padding(top = 8.dp)
+                .size(40.dp)
+
+                .clip(CircleShape)
                 .background(color = Color.White),
-            painter = painterResource(id = comment.authorAvatarId),
+            model = comment.authorAvatarUrl,
             contentDescription = null,
         )
         Spacer(modifier = Modifier.width(8.dp))
         Column {
             Text(
-                text = "${comment.authorName} Comment id: ${comment.id}",
+                text = comment.authorName,
                 color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold
@@ -135,15 +151,5 @@ private fun CommentItem(
                 fontSize = 12.sp,
             )
         }
-    }
-}
-
-@Preview
-@Composable
-private fun PreviewComment() {
-    VKClientComposeTheme(
-        darkTheme = true
-    ) {
-        CommentItem(comment = PostComment(id = 0))
     }
 }
