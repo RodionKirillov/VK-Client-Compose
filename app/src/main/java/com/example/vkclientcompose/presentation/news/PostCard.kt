@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.MoreVert
@@ -26,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.vkclientcompose.R
 import com.example.vkclientcompose.domain.FeedPost
 import com.example.vkclientcompose.domain.StatisticItem
@@ -52,9 +54,11 @@ fun PostCard(
             Spacer(modifier = Modifier.padding(8.dp))
             Text(text = feedPost.contentText, color = MaterialTheme.colorScheme.onPrimary)
             Spacer(modifier = Modifier.padding(8.dp))
-            Image(
-                modifier = Modifier.fillMaxWidth(),
-                painter = painterResource(id = feedPost.contentImageResId),
+            AsyncImage(
+                model = feedPost.contentImageUrl,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth
             )
@@ -161,12 +165,13 @@ private fun PostHeader(
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
+        AsyncImage(
+            model = feedPost.communityImageUrl,
             modifier = Modifier
                 .size(50.dp)
-                .clip(CircleShape),
+                .clip(CircleShape)
+                .wrapContentHeight(),
             contentScale = ContentScale.Crop,
-            painter = painterResource(id = feedPost.avatarResId),
             contentDescription = null,
         )
         Spacer(modifier = Modifier.padding(8.dp))

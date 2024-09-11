@@ -54,6 +54,11 @@ android {
 
 dependencies {
 
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.10.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    // Logging-interceptor
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
     // VK
     implementation ("com.vk:android-sdk-core:4.1.0")
     implementation ("com.vk:android-sdk-api:4.1.0")
@@ -64,13 +69,10 @@ dependencies {
     // Viewmodel Compose
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
     val nav_version = "2.7.7"
-
     // Jetpack Compose integration
     implementation("androidx.navigation:navigation-compose:$nav_version")
-
     // SwipeToDismiss
     implementation("androidx.compose.material3:material3:1.2.1")
-
     // Compose LiveData
     implementation ("androidx.compose.runtime:runtime-livedata:1.6.8")
 
