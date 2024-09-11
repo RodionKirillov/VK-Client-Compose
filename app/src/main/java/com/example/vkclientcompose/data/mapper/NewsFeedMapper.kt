@@ -4,7 +4,6 @@ import com.example.vkclientcompose.data.model.NewsFeedResponseDto
 import com.example.vkclientcompose.domain.FeedPost
 import com.example.vkclientcompose.domain.StatisticItem
 import com.example.vkclientcompose.domain.StatisticType
-import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -22,6 +21,7 @@ class NewsFeedMapper {
             val group = groups.find { it.id == post.communityId.absoluteValue } ?: continue
             val feedPost = FeedPost(
                 id = post.id,
+                communityId = post.communityId,
                 communityName = group.name,
                 publicationData = mapTimestampToDate(post.date * 1000),
                 communityImageUrl = group.imageUrl,
@@ -33,7 +33,7 @@ class NewsFeedMapper {
                     StatisticItem(type = StatisticType.SHARES, post.reposts.count),
                     StatisticItem(type = StatisticType.COMMENTS, post.comments.count),
                 ),
-                isFavorite = post.isFavorite
+                isLiked = post.likes.userLikes > 0
             )
             result.add(feedPost)
         }
