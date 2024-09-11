@@ -39,8 +39,6 @@ fun PostCard(
     modifier: Modifier = Modifier,
     feedPost: FeedPost,
     onLikeClickListener: (StatisticItem) -> Unit,
-    onShareClickListener: (StatisticItem) -> Unit,
-    onViewsClickListener: (StatisticItem) -> Unit,
     onCommentClickListener: (StatisticItem) -> Unit,
 ) {
     Card(
@@ -64,12 +62,9 @@ fun PostCard(
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth
             )
-            Spacer(modifier = Modifier.padding(8.dp))
             Statistics(
                 feedPost.statistics,
                 onLikeClickListener = onLikeClickListener,
-                onViewsClickListener = onViewsClickListener,
-                onShareClickListener = onShareClickListener,
                 onCommentClickListener = onCommentClickListener,
                 isFavorite = feedPost.isLiked
             )
@@ -81,36 +76,27 @@ fun PostCard(
 private fun Statistics(
     statistics: List<StatisticItem>,
     onLikeClickListener: (StatisticItem) -> Unit,
-    onShareClickListener: (StatisticItem) -> Unit,
-    onViewsClickListener: (StatisticItem) -> Unit,
     onCommentClickListener: (StatisticItem) -> Unit,
     isFavorite: Boolean
 ) {
-    Row(modifier = Modifier.padding(8.dp)) {
+    Row(modifier = Modifier.padding(12.dp)) {
         Row(
-            modifier = Modifier
-                .weight(1f)
+            modifier = Modifier.weight(0.4f)
         ) {
             val viewsItem = statistics.getItemByType(StatisticType.VIEWS)
             IconWithText(
                 iconResId = R.drawable.eye,
                 text = formatStatisticCount(viewsItem.count),
-                onItemClickListener = {
-                    onViewsClickListener(viewsItem)
-                }
             )
         }
         Row(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(0.6f),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             val sharesItem = statistics.getItemByType(StatisticType.SHARES)
             IconWithText(
                 iconResId = R.drawable.share_android,
                 text = formatStatisticCount(sharesItem.count),
-                onItemClickListener = {
-                    onShareClickListener(sharesItem)
-                }
             )
             val commentItem = statistics.getItemByType(StatisticType.COMMENTS)
             IconWithText(
@@ -141,7 +127,6 @@ private fun formatStatisticCount(count: Int): String {
     } else {
         count.toString()
     }
-
 }
 
 private fun List<StatisticItem>.getItemByType(type: StatisticType): StatisticItem {
@@ -152,17 +137,22 @@ private fun List<StatisticItem>.getItemByType(type: StatisticType): StatisticIte
 private fun IconWithText(
     iconResId: Int,
     text: String,
-    onItemClickListener: () -> Unit,
+    onItemClickListener: (() -> Unit)? = null,
     tint: Color = MaterialTheme.colorScheme.onSecondary
 ) {
-    Row(
-        modifier = Modifier.clickable {
+    val modifier = if (onItemClickListener == null) {
+        Modifier
+    } else {
+        Modifier.clickable {
             onItemClickListener()
-        },
+        }
+    }
+    Row(
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            modifier = Modifier.size(18.dp),
+            modifier = Modifier.size(20.dp),
             painter = painterResource(id = iconResId),
             contentDescription = null,
             tint = tint
@@ -170,6 +160,7 @@ private fun IconWithText(
         Spacer(modifier = Modifier.padding(2.dp))
         Text(
             text = text,
+            fontSize = 14.sp,
             color = MaterialTheme.colorScheme.onSecondary
         )
     }

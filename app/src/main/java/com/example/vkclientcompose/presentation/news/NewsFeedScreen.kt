@@ -52,6 +52,15 @@ fun NewsFeedScreen(
             )
         }
 
+        is NewsFeedScreenState.Loading -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = VkBlue)
+            }
+        }
+
         NewsFeedScreenState.Initial -> {
 
         }
@@ -121,18 +130,6 @@ fun FeedPosts(
             ) {
                 PostCard(
                     feedPost = model,
-                    onViewsClickListener = { statisticItem ->
-                        viewModel.updateCount(
-                            feedPost = model,
-                            item = statisticItem
-                        )
-                    },
-                    onShareClickListener = { statisticItem ->
-                        viewModel.updateCount(
-                            feedPost = model,
-                            item = statisticItem
-                        )
-                    },
                     onCommentClickListener = {
                         onCommentClickListener(model)
                     },
@@ -151,9 +148,7 @@ fun FeedPosts(
                         .padding(16.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator(
-                        color = VkBlue
-                    )
+                    CircularProgressIndicator(color = VkBlue)
                 }
             } else {
                 SideEffect {
