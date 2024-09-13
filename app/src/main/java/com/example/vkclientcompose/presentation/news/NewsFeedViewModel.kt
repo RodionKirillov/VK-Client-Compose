@@ -1,6 +1,7 @@
 package com.example.vkclientcompose.presentation.news
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,8 +10,10 @@ import com.example.vkclientcompose.data.repository.NewsFeedRepository
 import com.example.vkclientcompose.domain.FeedPost
 import com.example.vkclientcompose.domain.StatisticItem
 import com.example.vkclientcompose.extensions.mergeWith
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
@@ -22,7 +25,9 @@ class NewsFeedViewModel(
     application: Application
 ) : AndroidViewModel(application) {
 
-    private val initialState = NewsFeedScreenState.Initial
+    private val exceptionHandler = CoroutineExceptionHandler { _, _ ->
+        Log.d("LOG_TAG", "Exception caught by exception handler")
+    }
 
     private val repository = NewsFeedRepository(application)
 
@@ -54,13 +59,13 @@ class NewsFeedViewModel(
     }
 
     fun changeLikeStatus(feedPost: FeedPost) {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             repository.changeLikeStatus(feedPost = feedPost)
         }
     }
 
     fun remove(feedPost: FeedPost) {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             repository.deletePost(feedPost = feedPost)
         }
     }

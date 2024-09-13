@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.vkclientcompose.data.repository.NewsFeedRepository
 import com.example.vkclientcompose.domain.FeedPost
 import com.example.vkclientcompose.domain.PostComment
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class CommentsViewModel(
@@ -18,20 +19,11 @@ class CommentsViewModel(
 
     private val repository = NewsFeedRepository(application)
 
-    private val _screenState = MutableLiveData<CommentsScreenState>(CommentsScreenState.Initial)
-    val screenState: LiveData<CommentsScreenState> = _screenState
-
-    init {
-        loadComments(feedPost = feedPost)
-    }
-
-    private fun loadComments(feedPost: FeedPost) {
-        viewModelScope.launch {
-            val comments = repository.getComments(feedPost)
-            _screenState.value = CommentsScreenState.Comments(
+    val screenState = repository.getComments(feedPost)
+        .map {
+            CommentsScreenState.Comments(
                 feedPost = feedPost,
-                comments = comments
-            )
+                comments = it
+            ) as CommentsScreenState
         }
-    }
 }
