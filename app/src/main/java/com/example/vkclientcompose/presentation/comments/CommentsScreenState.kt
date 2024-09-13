@@ -1,7 +1,7 @@
 package com.example.vkclientcompose.presentation.comments
 
-import com.example.vkclientcompose.domain.FeedPost
-import com.example.vkclientcompose.domain.PostComment
+import com.example.vkclientcompose.domain.entity.FeedPost
+import com.example.vkclientcompose.domain.entity.PostComment
 
 sealed class CommentsScreenState {
 
