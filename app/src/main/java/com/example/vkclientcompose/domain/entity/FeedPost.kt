@@ -1,4 +1,4 @@
-package com.example.vkclientcompose.domain
+package com.example.vkclientcompose.domain.entity
 
 import android.os.Bundle
 import android.os.Parcelable

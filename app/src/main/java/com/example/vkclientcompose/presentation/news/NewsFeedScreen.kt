@@ -19,7 +19,6 @@ import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,9 +27,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.vkclientcompose.domain.FeedPost
+import com.example.vkclientcompose.domain.entity.FeedPost
 import com.example.vkclientcompose.ui.theme.VkBlue
-import com.example.vkclientcompose.ui.theme.VkGreyBackground
 
 @Composable
 fun NewsFeedScreen(
