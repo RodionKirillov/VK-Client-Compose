@@ -25,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,23 +42,33 @@ import com.example.vkclientcompose.domain.entity.FeedPost
 import com.example.vkclientcompose.domain.entity.PostComment
 import com.example.vkclientcompose.presentation.App
 import com.example.vkclientcompose.presentation.ViewModelFactory
+import com.example.vkclientcompose.presentation.getApplicationComponent
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun CommentsScreen(
     feedPost: FeedPost,
     onBackPressed: () -> Unit
 ) {
-    val component = (LocalContext.current.applicationContext as App)
-        .component
+    val component = getApplicationComponent()
         .getCommentsScreenComponentFactory()
         .create(feedPost = feedPost)
 
-    val viewModel: CommentsViewModel = viewModel(
-        factory = component.getViewModelFactory()
-    )
-
+    val viewModel: CommentsViewModel = viewModel(factory = component.getViewModelFactory())
     val screenState = viewModel.screenState.collectAsState(CommentsScreenState.Initial)
+
+    CommentsScreenContent(
+        screenState = screenState,
+        onBackPressed = onBackPressed
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun CommentsScreenContent(
+    screenState: State<CommentsScreenState>,
+    onBackPressed: () -> Unit
+) {
     val currentState = screenState.value
 
     if (currentState is CommentsScreenState.Comments) {

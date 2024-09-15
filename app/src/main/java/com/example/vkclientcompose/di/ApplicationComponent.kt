@@ -2,6 +2,7 @@ package com.example.vkclientcompose.di
 
 import android.content.Context
 import com.example.vkclientcompose.domain.entity.FeedPost
+import com.example.vkclientcompose.presentation.ViewModelFactory
 import com.example.vkclientcompose.presentation.main.MainActivity
 import dagger.BindsInstance
 import dagger.Component
@@ -15,7 +16,7 @@ import dagger.Component
 )
 interface ApplicationComponent {
 
-    fun inject(mainActivity: MainActivity)
+    fun getViewModelFactory(): ViewModelFactory
 
     fun getCommentsScreenComponentFactory(): CommentsScreenComponent.Factory
 
