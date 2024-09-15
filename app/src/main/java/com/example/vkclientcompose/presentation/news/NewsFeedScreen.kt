@@ -18,7 +18,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,20 +28,35 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.vkclientcompose.domain.FeedPost
+import com.example.vkclientcompose.domain.entity.FeedPost
+import com.example.vkclientcompose.presentation.ViewModelFactory
+import com.example.vkclientcompose.presentation.getApplicationComponent
 import com.example.vkclientcompose.ui.theme.VkBlue
-import com.example.vkclientcompose.ui.theme.VkGreyBackground
 
 @Composable
 fun NewsFeedScreen(
     paddingValues: PaddingValues,
     onCommentClickListener: (FeedPost) -> Unit
-
 ) {
-    val viewModel: NewsFeedViewModel = viewModel()
+    val component = getApplicationComponent()
+    val viewModel: NewsFeedViewModel = viewModel(factory = component.getViewModelFactory())
+    val screenState = viewModel.screenState.collectAsState(NewsFeedScreenState.Initial)
 
-    val screenState = viewModel.screenState.observeAsState(NewsFeedScreenState.Initial)
+    NewsFeedScreenContent(
+        screenState = screenState,
+        paddingValues = paddingValues,
+        onCommentClickListener = onCommentClickListener,
+        viewModel = viewModel
+    )
+}
 
+@Composable
+private fun NewsFeedScreenContent(
+    screenState: State<NewsFeedScreenState>,
+    paddingValues: PaddingValues,
+    onCommentClickListener: (FeedPost) -> Unit,
+    viewModel: NewsFeedViewModel
+) {
     when (val currentState = screenState.value) {
         is NewsFeedScreenState.Posts -> {
             FeedPosts(

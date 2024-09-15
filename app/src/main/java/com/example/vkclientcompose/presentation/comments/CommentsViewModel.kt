@@ -1,37 +1,21 @@
 package com.example.vkclientcompose.presentation.comments
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.vkclientcompose.data.repository.NewsFeedRepository
-import com.example.vkclientcompose.domain.FeedPost
-import com.example.vkclientcompose.domain.PostComment
-import kotlinx.coroutines.launch
+import com.example.vkclientcompose.domain.entity.FeedPost
+import com.example.vkclientcompose.domain.usecases.GetCommentsUseCase
+import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class CommentsViewModel(
-    feedPost: FeedPost,
-    application: Application
-) : AndroidViewModel(application) {
+class CommentsViewModel @Inject constructor(
+    private val feedPost: FeedPost,
+    private val getCommentsUseCase: GetCommentsUseCase
+) : ViewModel() {
 
-    private val repository = NewsFeedRepository(application)
-
-    private val _screenState = MutableLiveData<CommentsScreenState>(CommentsScreenState.Initial)
-    val screenState: LiveData<CommentsScreenState> = _screenState
-
-    init {
-        loadComments(feedPost = feedPost)
-    }
-
-    private fun loadComments(feedPost: FeedPost) {
-        viewModelScope.launch {
-            val comments = repository.getComments(feedPost)
-            _screenState.value = CommentsScreenState.Comments(
+    val screenState = getCommentsUseCase(feedPost)
+        .map {
+            CommentsScreenState.Comments(
                 feedPost = feedPost,
-                comments = comments
-            )
+                comments = it
+            ) as CommentsScreenState
         }
-    }
 }

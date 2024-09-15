@@ -2,16 +2,17 @@ package com.example.vkclientcompose.data.mapper
 
 import com.example.vkclientcompose.data.model.CommentsResponseDto
 import com.example.vkclientcompose.data.model.NewsFeedResponseDto
-import com.example.vkclientcompose.domain.FeedPost
-import com.example.vkclientcompose.domain.PostComment
-import com.example.vkclientcompose.domain.StatisticItem
-import com.example.vkclientcompose.domain.StatisticType
+import com.example.vkclientcompose.domain.entity.FeedPost
+import com.example.vkclientcompose.domain.entity.PostComment
+import com.example.vkclientcompose.domain.entity.StatisticItem
+import com.example.vkclientcompose.domain.entity.StatisticType
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import javax.inject.Inject
 import kotlin.math.absoluteValue
 
-class NewsFeedMapper {
+class NewsFeedMapper @Inject constructor() {
 
     fun mapResponseToPost(responseDto: NewsFeedResponseDto): List<FeedPost> {
         val result = mutableListOf<FeedPost>()
@@ -64,6 +65,5 @@ class NewsFeedMapper {
     private fun mapTimestampToDate(timestamp: Long): String {
         val date = Date(timestamp * 1000)
         return SimpleDateFormat("d MMMM yyyy, hh:mm", Locale.getDefault()).format(date)
-
     }
 }

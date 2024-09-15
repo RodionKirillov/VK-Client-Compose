@@ -1,6 +1,5 @@
 package com.example.vkclientcompose.presentation.comments
 
-import android.app.Application
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,14 +23,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.DefaultTintColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,24 +38,37 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.vkclientcompose.R
-import com.example.vkclientcompose.domain.FeedPost
-import com.example.vkclientcompose.domain.PostComment
-import com.example.vkclientcompose.ui.theme.VkGreyBackground
+import com.example.vkclientcompose.domain.entity.FeedPost
+import com.example.vkclientcompose.domain.entity.PostComment
+import com.example.vkclientcompose.presentation.App
+import com.example.vkclientcompose.presentation.ViewModelFactory
+import com.example.vkclientcompose.presentation.getApplicationComponent
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun CommentsScreen(
     feedPost: FeedPost,
     onBackPressed: () -> Unit
 ) {
-    val viewModel: CommentsViewModel = viewModel(
-        factory = CommentsViewModelFactory(
-            feedPost = feedPost,
-            application = LocalContext.current.applicationContext as Application
-        )
-    )
+    val component = getApplicationComponent()
+        .getCommentsScreenComponentFactory()
+        .create(feedPost = feedPost)
 
-    val screenState = viewModel.screenState.observeAsState(CommentsScreenState.Initial)
+    val viewModel: CommentsViewModel = viewModel(factory = component.getViewModelFactory())
+    val screenState = viewModel.screenState.collectAsState(CommentsScreenState.Initial)
+
+    CommentsScreenContent(
+        screenState = screenState,
+        onBackPressed = onBackPressed
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun CommentsScreenContent(
+    screenState: State<CommentsScreenState>,
+    onBackPressed: () -> Unit
+) {
     val currentState = screenState.value
 
     if (currentState is CommentsScreenState.Comments) {

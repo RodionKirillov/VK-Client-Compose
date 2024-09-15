@@ -5,8 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.vkclientcompose.domain.entity.AuthState
+import com.example.vkclientcompose.presentation.getApplicationComponent
 import com.example.vkclientcompose.ui.theme.VKClientComposeTheme
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKScope
@@ -17,16 +19,17 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val component = getApplicationComponent()
+            val viewModel: MainViewModel = viewModel(factory = component.getViewModelFactory())
+            val authState = viewModel.authState.collectAsState(AuthState.InitialState)
+
+            val launcher = rememberLauncherForActivityResult(
+                contract = VK.getVKAuthActivityResultContract()
+            ) {
+                viewModel.performAuthResult()
+            }
+
             VKClientComposeTheme {
-                val viewModel: MainViewModel = viewModel()
-                val authState = viewModel.authState.observeAsState(AuthState.InitialState)
-
-                val launcher = rememberLauncherForActivityResult(
-                    contract = VK.getVKAuthActivityResultContract()
-                ) {
-                    viewModel.performAuthResult(it)
-                }
-
                 when (authState.value) {
                     is AuthState.Authorized -> {
                         MainScreen()
