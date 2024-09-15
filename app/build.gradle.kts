@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
 
+    id ("kotlin-kapt")
     // Parcelize
     id("kotlin-parcelize")
 }
@@ -54,6 +55,9 @@ android {
 
 dependencies {
 
+    // Dagger2
+    implementation ("com.google.dagger:dagger:2.51")
+    kapt ("com.google.dagger:dagger-compiler:2.51")
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.10.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
@@ -67,14 +71,14 @@ dependencies {
     // GSON
     implementation ("com.google.code.gson:gson:2.11.0")
     // Viewmodel Compose
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.5")
     val nav_version = "2.7.7"
     // Jetpack Compose integration
     implementation("androidx.navigation:navigation-compose:$nav_version")
     // SwipeToDismiss
-    implementation("androidx.compose.material3:material3:1.2.1")
+    implementation("androidx.compose.material3:material3:1.3.0")
     // Compose LiveData
-    implementation ("androidx.compose.runtime:runtime-livedata:1.6.8")
+    implementation ("androidx.compose.runtime:runtime-livedata:1.7.1")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

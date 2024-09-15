@@ -40,18 +40,17 @@ import coil.compose.AsyncImage
 import com.example.vkclientcompose.R
 import com.example.vkclientcompose.domain.entity.FeedPost
 import com.example.vkclientcompose.domain.entity.PostComment
+import com.example.vkclientcompose.presentation.ViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CommentsScreen(
+    viewModelFactory: ViewModelFactory,
     feedPost: FeedPost,
     onBackPressed: () -> Unit
 ) {
     val viewModel: CommentsViewModel = viewModel(
-        factory = CommentsViewModelFactory(
-            feedPost = feedPost,
-            application = LocalContext.current.applicationContext as Application
-        )
+       factory = viewModelFactory
     )
 
     val screenState = viewModel.screenState.collectAsState(CommentsScreenState.Initial)
