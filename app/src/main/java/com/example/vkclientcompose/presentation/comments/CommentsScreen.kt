@@ -1,6 +1,5 @@
 package com.example.vkclientcompose.presentation.comments
 
-import android.app.Application
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -40,17 +39,22 @@ import coil.compose.AsyncImage
 import com.example.vkclientcompose.R
 import com.example.vkclientcompose.domain.entity.FeedPost
 import com.example.vkclientcompose.domain.entity.PostComment
+import com.example.vkclientcompose.presentation.App
 import com.example.vkclientcompose.presentation.ViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CommentsScreen(
-    viewModelFactory: ViewModelFactory,
     feedPost: FeedPost,
     onBackPressed: () -> Unit
 ) {
+    val component = (LocalContext.current.applicationContext as App)
+        .component
+        .getCommentsScreenComponentFactory()
+        .create(feedPost = feedPost)
+
     val viewModel: CommentsViewModel = viewModel(
-       factory = viewModelFactory
+        factory = component.getViewModelFactory()
     )
 
     val screenState = viewModel.screenState.collectAsState(CommentsScreenState.Initial)
