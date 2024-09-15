@@ -10,7 +10,6 @@ class App : Application() {
     val component: ApplicationComponent by lazy {
         DaggerApplicationComponent.factory().create(
             this,
-            FeedPost(0, 0, "0", "0", "0", "0", "0", listOf(), false)
         )
     }
 }
